@@ -1,19 +1,49 @@
 {% extends 'learning_logs/base.html' %}
+{% load django_bootstrap5 %}
+
+
+{% block title %}New Topic{% endblock title %}
+
+
+{% block page_header %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-2">
+            <li class="breadcrumb-item">
+                <a href="{% url 'learning_logs:topics' %}">Topics</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">New topic</li>
+        </ol>
+    </nav>
+    <h2 class="fw-bold mb-0">Add a new topic</h2>
+{% endblock page_header %}
 
 
 {% block content %}
-    <p> Add a New Topic : </p>
-    <form action = "{% url 'learning_logs:new_topic'%}" method = 'post'>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
 
-        <!-- to prevent attackers from using the form to gain unauthorized access to the server.
-            (This kind of attack is called a cross-site request forgery.) -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
 
-        {% csrf_token %} <!-- cross-site request forgery (csrf)-->
+                    <form action="{% url 'learning_logs:new_topic' %}" method="post">
 
-        {{ form.as_div }} <!-- The as_div modifier tells Django to render all the form elements as 
-                            HTML <div></div> elements this is a simple way to display the form neatly-->
+                        {# csrf_token prevents cross-site request forgery (CSRF) attacks, #}
+                        {# where an attacker tricks a user into submitting a form without knowing. #}
+                        {% csrf_token %}
 
-    <button name='submit'> Add Topic </button>
-    </form>
+                        {# bootstrap_form renders every form field with Bootstrap styling and error messages. #}
+                        {% bootstrap_form form %}
 
+                        <div class="d-flex gap-2 mt-4">
+                            {% bootstrap_button button_type="submit" content="Add topic" button_class="btn-primary" %}
+                            <a href="{% url 'learning_logs:topics' %}"
+                            class="btn btn-outline-secondary">Cancel</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
 {% endblock content %}

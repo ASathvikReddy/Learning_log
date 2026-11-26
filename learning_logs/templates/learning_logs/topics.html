@@ -1,26 +1,43 @@
 {% extends 'learning_logs/base.html' %}
+{% load django_bootstrap5 %}
+
+
+{% block title %}Topics{% endblock title %}
+
+
+{% block page_header %}
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+        <h1 class="fw-bold mb-0">Topics</h1>
+
+        {# Link to the new_topic page #}
+        <a href="{% url 'learning_logs:new_topic' %}" class="btn btn-primary">
+            + Add new topic
+        </a>
+    </div>
+{% endblock page_header %}
 
 
 {% block content %}
-    <p>Topics</p>
-    <ul>
-        {% for topic in topics %}
-        <!-- <li>{{topic.text}}</li> -->
+    {% if topics %}
+        <div class="list-group shadow-sm">
+            {% for topic in topics %}
 
-        <!-- 
-            We use the URL template tag to generate the proper link, based on 
-            the URL pattern in learning_logs with the name 'topic'. This URL pattern 
-            requires a topic_id argument, so we add the attribute topic.id to the URL 
-            template tag. 
-        -->
-        <li>
-            <a href ="{% url 'learning_logs:topic' topic.id %}"> {{topic.text}} </a>
-        </li>
+                {# The url tag builds the link from the 'topic' URL pattern, which needs the topic's id. #}
+                <a href="{% url 'learning_logs:topic' topic.id %}"
+                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
+                    <span class="fw-semibold">{{ topic.text }}</span>
+                    <span class="text-muted">&raquo;</span>
+                </a>
 
-        {% empty %}
-        <li>>No topics have been added yet.</li>
-        {% endfor %}
-    </ul>
-    <!--  we include a link to the new_topic page on the topics page -->
-    <a href = "{% url 'learning_logs:new_topic' %}"> Add New Topic </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center text-muted py-5 bg-white border rounded-3 shadow-sm">
+            <div class="fs-1 mb-2">🗂️</div>
+            <p class="mb-3">No topics have been added yet.</p>
+            <a href="{% url 'learning_logs:new_topic' %}" class="btn btn-primary">
+                Add your first topic
+            </a>
+        </div>
+    {% endif %}
 {% endblock content %}

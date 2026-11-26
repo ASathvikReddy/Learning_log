@@ -1,23 +1,57 @@
 {% extends 'learning_logs/base.html' %}
+{% load django_bootstrap5 %}
+
+
+{% block title %}{{ topic.text }}{% endblock title %}
+
+
+{% block page_header %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-2">
+            <li class="breadcrumb-item">
+                <a href="{% url 'learning_logs:topics' %}">Topics</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{ topic.text }}</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+        <h1 class="fw-bold mb-0">{{ topic.text }}</h1>
+        <a href="{% url 'learning_logs:new_entry' topic.id %}" class="btn btn-primary">
+            + Add new entry
+        </a>
+    </div>
+{% endblock page_header %}
 
 
 {% block content %}
-    <p> Topic : {{ topic.text }} </p>
-    <p> Entries : </p>
-    <p>
-        <a href = "{% url 'learning_logs:new_entry' topic.id %}">Add new entry</a>
-    </p>
-    <ul>
-        {% for entry in entries %}
-        <li>
-            <p> {{ entry.date_added|date:'M d, Y H:i'}}</p>
-            <p> {{ entry.text|linebreaks}} </p>
-            <p>
-                <a href = "{% url 'learning_logs:edit_entry' entry.id%}">Edit entry</a>
-            </p>
-        </li>
-        {% empty %}
-        <li>There are no entries for this topic yet.</li>
-        {% endfor %}
-    </ul
+    <h5 class="text-muted mb-3">Entries</h5>
+
+    {% for entry in entries %}
+        <div class="card shadow-sm border-0 mb-3">
+
+            {# Card header with timestamp and edit link #}
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <span class="text-muted">
+                    🕒 {{ entry.date_added|date:'M d, Y H:i' }}
+                </span>
+                <a href="{% url 'learning_logs:edit_entry' entry.id %}"
+                class="btn btn-outline-secondary btn-sm">Edit entry</a>
+            </div>
+
+            {# Card body with entry text #}
+            <div class="card-body">
+                {{ entry.text|linebreaks }}
+            </div>
+
+        </div>
+    {% empty %}
+        <div class="text-center text-muted py-5 bg-white border rounded-3 shadow-sm">
+            <div class="fs-1 mb-2">📝</div>
+            <p class="mb-3">There are no entries for this topic yet.</p>
+            <a href="{% url 'learning_logs:new_entry' topic.id %}" class="btn btn-primary">
+                Write your first entry
+            </a>
+        </div>
+    {% endfor %}
 {% endblock content %}

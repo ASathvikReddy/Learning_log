@@ -1,8 +1,75 @@
 {% extends 'learning_logs/base.html' %}
-<!-- <p>Learning Log</p> -->
+{% load django_bootstrap5 %}
+
+
+{% block title %}Learning Log - Home{% endblock title %}
+
+
+{% block page_header %}
+    <div class="p-4 p-md-5 bg-white border rounded-3 shadow-sm text-center">
+        <h1 class="display-4 fw-bold">Track your learning.</h1>
+
+        <p class="lead text-muted mx-auto" style="max-width: 640px;">
+            Make your own Learning Log, and keep a list of the topics you're
+            learning about. Whenever you learn something new about a topic,
+            make an entry summarizing what you've learned.
+        </p>
+
+        <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center mt-4">
+            {% if user.is_authenticated %}
+                <a class="btn btn-primary btn-lg px-4"
+                href="{% url 'learning_logs:topics' %}">Go to my topics &raquo;</a>
+            {% else %}
+                <a class="btn btn-primary btn-lg px-4"
+                href="{% url 'accounts:register' %}">Register &raquo;</a>
+                <a class="btn btn-outline-secondary btn-lg px-4"
+                href="{% url 'accounts:login' %}">Log in</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock page_header %}
 
 
 {% block content %}
-    <p>Learning Log helps you keep track of your learning, for any topic you're interested in.</p>
-{% endblock content %}
+    <p class="text-center text-muted mb-4">
+        Learning Log helps you keep track of your learning, for any topic you're interested in.
+    </p>
 
+    <div class="row g-4">
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <div class="card-body p-4">
+                    <div class="fs-1 mb-2">🗂️</div>
+                    <h5 class="card-title fw-bold">Create topics</h5>
+                    <p class="card-text text-muted">
+                        Add a topic for each subject you're studying.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <div class="card-body p-4">
+                    <div class="fs-1 mb-2">✍️</div>
+                    <h5 class="card-title fw-bold">Write entries</h5>
+                    <p class="card-text text-muted">
+                        Summarize what you learn, as you learn it.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm border-0 text-center">
+                <div class="card-body p-4">
+                    <div class="fs-1 mb-2">📈</div>
+                    <h5 class="card-title fw-bold">Review progress</h5>
+                    <p class="card-text text-muted">
+                        Look back at your entries and see how far you've come.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
